@@ -6,6 +6,7 @@ import os
 
 import load
 import util
+import analyze
 
 def predict(data_json, model_path):
     preproc = util.load(os.path.dirname(model_path))
@@ -23,3 +24,6 @@ if __name__ == '__main__':
     parser.add_argument("model_path", help="path to model")
     args = parser.parse_args()
     probs = predict(args.data_json, args.model_path)
+
+    print(probs)
+    analyze.analyze_ecg_data(probs)
