@@ -13,8 +13,8 @@ def calculate_md5(input_string):
 # TODO: may need wrap some prompt when call baichuan api
 def do_request():
     url = "https://api.baichuan-ai.com/v1/chat"
-    api_key = "your_api_key"
-    secret_key = "your_secret_key"
+    api_key = "f412c9822c62e4fe037916c1365bf603"
+    secret_key = "okEEqzb3g04z6HyfREQW6eS6imY="
 
     data = {
         "model": "Baichuan2-53B",
