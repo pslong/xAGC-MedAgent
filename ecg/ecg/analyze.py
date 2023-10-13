@@ -33,4 +33,4 @@ def analyze_ecg_data(ecg_data):
     print(results_df)
     print(f"The most probable class is: {most_probable_class}")
 
-    return results_df
+    return results_df, most_probable_class

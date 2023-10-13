@@ -6,15 +6,18 @@ import os
 
 import load
 import util
-import analyze
 
-def predict(data_json, model_path):
-    preproc = util.load(os.path.dirname(model_path))
-    dataset = load.load_dataset(data_json)
+deep_ecg_mat = '/home/ubuntu/aimodel/ecg/dev-N.json'
+deep_ecg_model_path = '/home/ubuntu/aimodel/dirichlet_model'
+
+def predict():
+    preproc = util.load(os.path.dirname(deep_ecg_model_path))
+    dataset = load.load_dataset(deep_ecg_mat)
     x, y = preproc.process(*dataset)
 
-    model = keras.models.load_model(model_path)
+    model = keras.models.load_model(deep_ecg_model_path)
     probs = model.predict(x, verbose=1)
+    print(probs)
 
     return probs
 
@@ -26,4 +29,3 @@ if __name__ == '__main__':
     probs = predict(args.data_json, args.model_path)
 
     print(probs)
-    analyze.analyze_ecg_data(probs)
