@@ -14,6 +14,7 @@ def predict_ecg_model():
 def predict_deep_ecg_model():
     return predict_deep_ecg.predict()
 
+# TODO:
 def predict(input):
     print(input)
     if input == 'predict_ecg':
