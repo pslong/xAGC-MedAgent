@@ -17,6 +17,10 @@ def predict_deep_ecg_model():
 # TODO:
 def predict(input):
     print(input)
+
+    # TODO: use baichuan agent to select tools
+    # TODO: and use baichuan agent to wrap results
+
     if input == 'predict_ecg':
         return predict_ecg_model()
     elif input == 'predict_deep_ecg':

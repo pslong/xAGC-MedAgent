@@ -10,7 +10,7 @@ def calculate_md5(input_string):
     encrypted = md5.hexdigest()
     return encrypted
 
-# TODO:
+# TODO: may need wrap some prompt when call baichuan api
 def do_request():
     url = "https://api.baichuan-ai.com/v1/chat"
     api_key = "your_api_key"
