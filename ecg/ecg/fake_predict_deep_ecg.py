@@ -7,4 +7,9 @@ def predict():
         k=1
     )
 
-    return output[0]
+    print(output[0])
+
+    if (output[0] == True) :
+        return "有房颤"
+    else:
+        return "无房颤"

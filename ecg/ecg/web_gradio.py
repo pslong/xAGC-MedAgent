@@ -1,48 +1,26 @@
-import numpy as np
 import gradio as gr
-import tensorflow as tf
-from tensorflow import keras
-import os
 
-import predict_ecg
-# import predict_deep_ecg
-import fake_predict_deep_ecg as predict_deep_ecg
+import thought_chain
 
-# 心律不齐
-def predict_ecg_model():
-    return predict_ecg.predict()
+import baichuan_client
 
-# 房颤
-def predict_deep_ecg_model():
-    return predict_deep_ecg.predict()
-
-# TODO:
-def predict(input):
+def agent_start(input):
     print(input)
 
-    # TODO: use baichuan agent to select tools
-    # TODO: and use baichuan agent to wrap results
+    result = thought_chain.start_chain(input)
 
-    # [actions] = getActions(input)
+    print(result)
 
-    # for {
-    #    result += actions()
-    # }
+    wrappedInput = "你是一个专业的医生，需要你针对以下病人的心电图数据，做出一些专业的分析\n" + result
+    wrappedOutput = baichuan_client.doRequest("Baichuan2-53B", wrappedInput)
 
-    #    wrapped(result)
+    print(wrappedOutput)
 
-    # result1 = predict_ecg_model()
-    # result2 = predict_deep_ecg_model()
+    return result
 
-    if input == 'predict_ecg':
-        return predict_ecg_model()
-    elif input == 'predict_deep_ecg':
-        return predict_deep_ecg_model()
-    else:
-        return predict_ecg_model()
 
 iface = gr.Interface(
-    fn=predict,
+    fn=agent_start,
     inputs="text",
     outputs="text"
 )

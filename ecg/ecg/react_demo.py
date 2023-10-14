@@ -4,22 +4,21 @@ import outlines.models as models
 import outlines.text as text
 
 import predict_ecg
+import fake_predict_deep_ecg as predict_af
+import load_user_info
 
 
 @text.prompt
 def build_reAct_prompt(question):
-    """预测一下张三是否有心率不齐?
-    Tho 1: 我需要调用预测心率不齐函数
-    Act 2: PredictEcg '张三'
-    Obs 2: 该用户的心电图 (ECG) 数据被分类为正常窦性心律（Normal sinus rhythm）， 这表示 心脏的起搏和导航系统工作正常。平均概率为 94.30%，最高概率为 96.60%，最低概率为 90.85%。 ...
-    Tho 3: 张三的心电图 (ECG) 数据预测结果为正常窦性心律（Normal sinus rhythm），概率为94.30%, 这表示张三的心脏的起搏和导航系统一切正常
-    Act 4: Finish '根据张三的心电图数据，可预测为正常窦性心律（Normal sinus rhythm），概率为94.30%, 这表示张三的心脏的起搏和导航系统一切正常'
-    预测一下李四是否有心率不齐?
-    Tho 1: 我需要调用预测心率不齐函数
-    Act 2: PredictEcg '李四'
-    Obs 2: 该用户的心电图 (ECG) 数据被分类为心房颤动（AF rhythm）， 这是一种常见的心律失常，表现为心房的快速不规则跳动。心房颤动可能导致血液淤积并形成血栓，这有可能引起卒中。平均概率为 95.60%，最高概率为 97.30%，最低概率为 91.85%。 ...
-    Tho 3: 李四的心电图 (ECG) 数据预测结果为心房颤动（AF rhythm），概率为95.60%, 这表示李四出现心律失常，表现为心房的快速不规则跳动。心房颤动可能导致血液淤积并形成血栓，这有可能引起卒中
-    Act 4: Finish '根据李四的心电图数据，可预测为心房颤动（AF rhythm），概率为95.60%, 这表示李四出现心律失常，表现为心房的快速不规则跳动。心房颤动可能导致血液淤积并形成血栓，这有可能引起卒中'
+    """预测一下张三是否有心律不齐?
+    Tho 1: 我需要获取张三的心电图数据
+    Act 2: GetMatPath '张三'
+    Obs 2: /home/ubuntu/aimodel/ecg/dev-N.json
+    Tho 3: 我需要调用预测心律不齐函数
+    Act 4: PredictEcg '/home/ubuntu/aimodel/ecg/dev-N.json'
+    Obs 4: 该用户的心电图数据被分类为正常窦性心律, 这表示 心脏的起搏和导航系统工作正常。平均概率为 94.30%,最高概率为 96.60%,最低概率为 90.85% ...
+    Tho 5: 张三的心电图数据预测结果为正常窦性心律,概率为94.30%, 这表示张三的心脏的起搏和导航系统一切正常
+    Act 6: Finish '根据张三的心电图数据，可预测为正常窦性心律,概率为94.30%, 这表示张三的心脏的起搏和导航系统一切正常'
     {{ question }}
     """
 
@@ -30,11 +29,13 @@ def add_mode(i, mode, result, prompt):
     {{ mode }} {{ i }}: {{ result }}
     """
 
-def predict_ecg_model():
-    return predict_ecg.predict()
+def predict_ecg_model(mat_path):
+    return predict_ecg.predict(mat_path)
 
+def get_mat_path(user_name):
+    return load_user_info.getMatPath(user_name)
 
-prompt = build_reAct_prompt("预测一下王五是否有心率不齐")
+prompt = build_reAct_prompt("预测一下王五是否有心律不齐")
 
 complete = models.text_completion.openai(
     "gpt-3.5-turbo", max_tokens=1024, temperature=1.0
@@ -50,7 +51,7 @@ for i in range(1, 10):
         prompt += f"{thought}"
         print(thought)
     elif mode == "Act":
-        action = complete(prompt, is_in=["PredictEcg", "Finish"])
+        action = complete(prompt, is_in=["PredictEcg", "GetMatPath", "Finish"])
         prompt += f"{action} '"
         print(action)
 
@@ -59,8 +60,11 @@ for i in range(1, 10):
         prompt += f"{subject}'"
         print(subject)
 
-        if action == "PredictEcg":
-            result = predict_ecg_model()
+        if action == "GetMatPath":
+            result = get_mat_path(subject)
+            prompt = add_mode(i, "Obs", result, prompt)
+        elif action == "PredictEcg":
+            result = predict_ecg_model(subject)
             prompt = add_mode(i, "Obs", result, prompt)
         else:
             break
