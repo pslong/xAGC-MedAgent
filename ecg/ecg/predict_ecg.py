@@ -21,7 +21,6 @@ def predict():
     probs = model.predict(x, verbose=1)
     results_df, most_probable_class = analyze.analyze_ecg_data(probs)
 
-    print(probs)
     print(results_df)
     print(f"The most probable class is: {most_probable_class}")
 

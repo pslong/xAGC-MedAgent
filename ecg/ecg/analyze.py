@@ -70,7 +70,7 @@ def explain_heartbeat_data(input_dict, rhythm):
 
     key = keys[rhythm]
 
-    message = f"该用户的心电图 (ECG) 数据被分类为 '{translation}'， 这表示 {description_map[rhythm]}。"
+    message = f"该用户的心电图 (ECG) 数据被分类为{translation}， 这表示 {description_map[rhythm]}。"
 
     message += f"\n\n平均概率为 {input_data['Avg Probability'][key]}，最高概率为 {input_data['Max Probability'][key]}，最低概率为 {input_data['Min Probability'][key]}。"
 

@@ -6,16 +6,14 @@ import outlines.text as text
 
 @text.prompt
 def build_reAct_prompt(question):
-    """预测一下张三是否有心率不齐?
-    Tho 1: 我需要调用预测心率不齐函数
-    Act 2: PredictEcg '张三'
-    Obs 3: 该用户的心电图 (ECG) 数据被分类为 '正常窦性心律（Normal sinus rhythm）'， 这表示 心脏的起搏和导航系统工作正常。平均概率为 94.30%，最高概率为 96.60%，最低概率为 90.85%。 ...
-    Act 4: Finish "张三的心电图 (ECG) 数据预测为 '正常窦性心律（Normal sinus rhythm）'，概率为94.30%, 这表示张三的心脏的起搏和导航系统一切正常"
-    预测一下李四是否有心率不齐?
-    Tho 1: 我需要调用预测心率不齐函数
-    Act 2: PredictEcg '李四'
-    Obs 3: 该用户的心电图 (ECG) 数据被分类为 '心房颤动（AF rhythm）'， 这是一种常见的心律失常，表现为心房的快速不规则跳动。心房颤动可能导致血液淤积并形成血栓，这有可能引起卒中。平均概率为 95.60%，最高概率为 97.30%，最低概率为 91.85%。 ...
-    Act 4: Finish "李四的心电图 (ECG) 数据预测为 '心房颤动（AF rhythm）'，概率为95.60%, 这表示李四出现心律失常，表现为心房的快速不规则跳动。心房颤动可能导致血液淤积并形成血栓，这有可能引起卒中"
+    """What is the elevation range for the area that the eastern sector of the Colorado orogeny extends into?
+    Tho 1: I need to search Colorado orogeny, find the area that the eastern sector of the Colorado ...
+    Act 2: Search 'Colorado orogeny'
+    Obs 2: The Colorado orogeny was an episode of mountain building (an orogeny) ...
+    Tho 3: It does not mention the eastern sector. So I need to look up eastern sector.
+    ...
+    Tho 4: High Plains rise in elevation from around 1,800 to 7,000 ft, so the answer is 1,800 to 7,000 ft.
+    Act 5: Finish '1,800 to 7,000 ft'
     {{ question }}
     """
 
