@@ -25,4 +25,5 @@ def predict():
     print(results_df)
     print(f"The most probable class is: {most_probable_class}")
 
-    return results_df.to_json(), most_probable_class
+
+    return analyze.explain_heartbeat_data(results_df.to_json(), most_probable_class)

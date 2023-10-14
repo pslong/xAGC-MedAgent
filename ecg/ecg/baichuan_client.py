@@ -11,7 +11,7 @@ def calculate_md5(input_string):
     return encrypted
 
 # TODO: may need wrap some prompt when call baichuan api
-def do_request():
+def doRequest(model, prompt):
     url = "https://api.baichuan-ai.com/v1/chat"
     api_key = "f412c9822c62e4fe037916c1365bf603"
     secret_key = "okEEqzb3g04z6HyfREQW6eS6imY="
@@ -21,7 +21,7 @@ def do_request():
         "messages": [
             {
                 "role": "user",
-                "content": "世界第一高峰是"
+                "content": prompt
             }
         ]
     }
@@ -45,9 +45,12 @@ def do_request():
         print("请求成功！")
         print("响应header:", response.headers)
         print("响应body:", response.text)
+
+        return response.text
     else:
         print("请求失败，状态码:", response.status_code)
+        return response.status_code
 
 
 if __name__ == "__main__":
-    do_request()
+    doRequest("Baichuan2-53B", "世界上最高的山峰是？")

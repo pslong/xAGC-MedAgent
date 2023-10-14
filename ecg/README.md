@@ -17,6 +17,8 @@ Make and activate a new Python 3.9.18 environment
 ```
 virtualenv -p python3.9.18 ecg_env
 source ecg_env/bin/activate
+
+source ecg_env3_10/bin/activate
 ```
 
 Install the requirements (this may take a few minutes).
